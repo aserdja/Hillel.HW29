@@ -3,20 +3,23 @@ using HW29.DAL.Repositories.Interfaces;
 
 namespace HW29.BL.Services
 {
-	public class ProductService(IProductRepository repository) : IProductService
+	public class ProductService(IProductRepository productRepository, ICarRepository carRepository) : IProductService
 	{
-		private readonly IProductRepository _repository = repository;
+		private readonly IProductRepository _productRepository = productRepository;
+		private readonly ICarRepository _carRepository = carRepository;
 
-		public async Task SellCar(int productId)
+		public async Task SellCarAsync(int productId)
 		{
-			var product = await _repository.GetByIdAsync(productId);		
+			var product = await _productRepository.GetByIdAsync(productId);
+			var car = await _carRepository.GetByIdAsync(productId);
 			
-			if (product == null)
+			if (product == null | car == null)
 			{
-				throw new Exception("Product not found");
+				throw new Exception("Product or car not found");
 			}
 
-			await _repository.DeleteAsync(product);
+			await _productRepository.DeleteAsync(product);
+			await _carRepository.DeleteAsync(car);
 		}
 	}
 }
