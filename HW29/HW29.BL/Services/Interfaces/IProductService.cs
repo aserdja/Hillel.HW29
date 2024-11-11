@@ -2,6 +2,6 @@
 {
 	public interface IProductService
 	{
-		Task SellCar(int productId);
+		Task SellCarAsync(int productId);
 	}
 }
