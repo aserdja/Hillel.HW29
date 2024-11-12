@@ -1,0 +1,34 @@
+name: ASP.NET Core Web API CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore HW29/HW29.sln
+
+    - name: Build solution
+      run: dotnet build HW29/HW29.sln --no-restore --configuration Release
+
+    - name: Run tests
+      run: dotnet test HW29/HW29.sln --no-build --configuration Release
+
+    - name: Publish artifact
+      run: dotnet publish HW29/HW29.sln -c Release ./publish
